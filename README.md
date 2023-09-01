@@ -12,3 +12,10 @@ LLM integration framework: Langchain<br>
 Vector Database : Pinecone<br>
 Embedding Model: ``text-embedding-ada-001`` (OpenAI)<br>
 LLM : ``gpt-3.5-turbo``<br>
+
+## Setup
+1. Clone the repository.
+</t> ``git clone https://github.com/umang299/lets_get_rich_chatbot.git``
+
+2. Create a .env file with your OpenAI API, Pinecone API
+</t> ``OPENAI_API_KEY : <<OPENAI_API_KEY>> <br> PINECONE_API_KEY: <<PINECONE_API_KEY>>``
