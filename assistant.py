@@ -27,7 +27,7 @@ class Assistant:
         
     def __load_index(self):
         self.__initialize_pinecone()
-        index = pinecone.Index(index_name='rag')
+        index = pinecone.Index(index_name=pinecone.list_indexes()[0])
         return index
 
     def __load_embedding_model(self):
