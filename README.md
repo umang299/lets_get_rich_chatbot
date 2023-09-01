@@ -17,5 +17,17 @@ LLM : ``gpt-3.5-turbo``<br>
 1. Clone the repository.
 </t> ``git clone https://github.com/umang299/lets_get_rich_chatbot.git``
 
-2. Create a .env file with your OpenAI API, Pinecone API
+2. Create a .env file with your OpenAI API, Pinecone API<br>
 </t> ``OPENAI_API_KEY : <<OPENAI_API_KEY>> <br> PINECONE_API_KEY: <<PINECONE_API_KEY>>``
+
+3. Install dependencies into virtual environment.<br>
+</t>``cd lets_get_rich_chatbot <br>
+</t>pip install -r requirements.txt``<br>
+
+4. For the sake of simplicity I have used chapters from the book rich dad poor dad. You can find all the chapter wise text under lessons.<br>
+</t>Run the following command to insert data into the pinecone index you have created. Make sure to create pinecone index with dimensions as *1536*.
+</t>``assistant = Assistant(openai_api_key= openai_api, pinecone_api_key= pinecone_api)``
+<t>``assistant.upsert(data_dir='lessons', batch_limit= 100)``
+
+5. Now you are all set to interact with the book using this assistant.
+</t> run ``python main.py``
