@@ -25,7 +25,7 @@ class Assistant:
         pinecone.init(api_key=self.pinecone_api,
                       environment="us-east1-gcp")
         
-    def __load_index(self):
+    def load_index(self):
         self.__initialize_pinecone()
         index = pinecone.Index(index_name=pinecone.list_indexes()[0])
         return index
@@ -51,7 +51,7 @@ class Assistant:
         return text_splitter
     
     def __initialize_vector_store(self):
-        index = self.__load_index()
+        index = self.load_index()
         embed = self.__load_embedding_model()
         text_field = 'text'
         vectorstore = Pinecone(index, 
@@ -69,7 +69,7 @@ class Assistant:
     
     def upsert(self, data_dir, batch_limit):
         text_splitter = self.__text_splitter()
-        index = self.__load_index()
+        index = self.load_index()
         embed = self.__load_embedding_model()
 
         batch_limit = 100
