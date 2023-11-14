@@ -4,13 +4,14 @@ import pinecone
 import tiktoken
 from uuid import uuid4
 
+from langchain.prompts import PromptTemplate
 from langchain.vectorstores import Pinecone
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from utils import save_json, read_file
+from utils import logger, read_file, load_conversation
 
 env_var = dotenv.dotenv_values(".env")
 
@@ -100,14 +101,37 @@ class Assistant:
                 texts = []
                 metadatas = []
 
+        
+
+    def __prompt_template(self, query):
+        convo = load_conversation(top_n=5)
+        prompt = read_file(file_path='prompt.txt')
+
+        prompt = prompt.replace("CONVERSATION", convo)
+        prompt = prompt.replace("user_message", query)
+
+        return prompt
+        
+
+
     def chain(self):
         llm = self.__llm()
         vectorstore = self.__initialize_vector_store()
-        qa_with_sources = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, 
-                                                                      chain_type="stuff",
-                                                                      retriever=vectorstore.as_retriever())
+        qa_with_sources = RetrievalQAWithSourcesChain.from_chain_type(
+                                                                    llm=llm,
+                                                                    chain_type="stuff",
+                                                                    retriever=vectorstore.as_retriever(),
+                                                                    )
         return qa_with_sources
     
+    
     def response(self, query):
-        chain = self.chain()
-        return chain(query)
+        if len(query) != 0:
+            logger(message=query, role='USER')
+            chain = self.chain()
+            prompt = self.__prompt_template(query=query)
+            response = chain(prompt)
+            logger(message=response['answer'], role='ASSISTANT')
+            return response['answer'], response['sources']
+        else:
+            return "Invalid Input", " "
