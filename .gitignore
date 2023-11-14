@@ -1,3 +1,4 @@
 .env
 __pycache__
+conversation
 playground.ipynb
